@@ -1,6 +1,6 @@
 # 🐾 OLPaw — Pet Identity & DNA Verification Platform (Web3)
 
-Aplikasi Web3 untuk identitas & verifikasi DNA kucing, dibangun di **BNB Smart Chain Testnet (Chain ID 97)**.
+Aplikasi Web3 untuk identitas & verifikasi DNA kucing, dibangun di **Chainlink Testnet (Chain ID 97)**.
 Mencakup: registrasi kucing 6 langkah, DNA profile hash on-chain, family tree, health report, marketplace, pesan, notifikasi, dan akun — persis seperti alur di video demo.
 
 > ⚠️ Proyek ini untuk **TESTNET ONLY**. Jangan pernah pakai private key mainnet.
@@ -72,7 +72,7 @@ BSC_TESTNET_RPC=https://bsc-testnet-rpc.publicnode.com
 
 > 🔐 Private key HANYA untuk testnet. File `.env` sudah masuk `.gitignore` sehingga tidak akan ter-upload ke GitHub.
 
-## 🚀 Langkah 2 — Compile & Deploy ke BNB Testnet
+## 🚀 Langkah 2 — Compile & Deploy ke Chainlink Testnet
 
 ```bash
 npx hardhat compile
