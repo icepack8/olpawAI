@@ -6,7 +6,7 @@ import {
   useReadContracts,
   useWriteContract,
 } from "wagmi";
-import { keccak256, toUtf8Bytes } from "viem";
+import { keccak256, stringToHex } from "viem";
 import { CONTRACT_ADDRESS, CONTRACT_ABI, CONTRACT_DEPLOYED } from "../contract";
 import { saveCatPayload } from "../lib/store";
 import { BSCSCAN, addBscTestnet } from "../lib/utils";
@@ -133,83 +133,86 @@ const onPhoto = (e) => {
   }
 
   async function submit() {
+      if (!address) {
+  setError("Wallet belum terhubung. Klik Connect Wallet dulu.");
+  return;
+        }
+  try {
     setError("");
-    try {
-      if (!CONTRACT_DEPLOYED)
-        throw new Error("Contract belum dideploy. Jalankan: npx hardhat run scripts/deploy.cjs --network bscTestnet");
 
-      const payload = {
-        basic: { name: form.name, dob: form.dob, gender: form.gender },
-        bio: {
-          breed: form.breed, coatColor: form.coatColor, coatLength: form.coatLength,
-          eyeColor: form.eyeColor, earType: form.earType, bodySize: form.bodySize,
-          traits: form.traits, notes: form.notes,
-        },
-        health: form.health,
-        owner: { ...form.owner },
-        family: form.family,
-        registeredBy: address,
-        registeredAt: new Date().toISOString(),
-      };
-      if (form.photo) payload.photo = form.photo;
+    const payload = {
+      ...form,
+      registeredBy: address,
+      registeredAt: new Date().toISOString(),
+    };
 
-      const dataHash = keccak256(toUtf8Bytes(JSON.stringify(payload)));
-      const count = await publicClient.readContract({
-        address: CONTRACT_ADDRESS, abi: CONTRACT_ABI, functionName: "catCount",
-      });
+    if (form.photo) payload.photo = form.photo;
 
-      const dobTs = form.dob ? Math.floor(new Date(form.dob).getTime() / 1000) : 0;
-      const tx = await writeContractAsync({
-        address: CONTRACT_ADDRESS, abi: CONTRACT_ABI, functionName: "registerCat",
-        args: [
-          form.name, form.breed || "Unknown", form.gender, BigInt(dobTs),
-          "", dataHash,
-          BigInt(Number(form.family.motherId) || 0),
-          BigInt(Number(form.family.fatherId) || 0),
-        ],
-      });
-      setTxHash(tx);
-      await publicClient.waitForTransactionReceipt({ hash: tx });
+    const dataHash = keccak256(stringToHex(JSON.stringify(payload)));
 
-      const id = Number(count) + 1;
+    const count = await publicClient.readContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: "catCount",
+    });
 
-      // DNA Profile (opsional) — seperti tombol "Save to Blockchain" di video
-      if (!form.dnaSkipped) {
-        const dnaProfile = {
-          catId: id,
-          breedComposition: form.breed ? { [form.breed]: 100 } : {},
-          traits: form.traits,
-          purityScore: Number(form.purityScore),
-          generatedAt: new Date().toISOString(),
-        };
-        const dnaHash = keccak256(toUtf8Bytes(JSON.stringify(dnaProfile)));
-        const tx2 = await writeContractAsync({
-          address: CONTRACT_ADDRESS, abi: CONTRACT_ABI, functionName: "saveDNAProfile",
-          args: [BigInt(id), dnaHash, Number(form.purityScore)],
-        });
-        await publicClient.waitForTransactionReceipt({ hash: tx2 });
-        const tx3 = await writeContractAsync({
-          address: CONTRACT_ADDRESS, abi: CONTRACT_ABI, functionName: "markDNAVerified",
-          args: [BigInt(id)],
-        });
-        await publicClient.waitForTransactionReceipt({ hash: tx3 });
-      }
+    const dobTs = form.dob
+      ? Math.floor(new Date(form.dob).getTime() / 1000)
+      : 0;
 
-      saveCatPayload(id, payload);
-      setNewCatId(id);
-    } catch (e) {
-      setError(e.shortMessage || e.message || "Transaksi gagal");
-    }
+    // ============================================================
+    // REGISTER CAT — hanya 1 transaksi blockchain
+    // ============================================================
+    const tx = await writeContractAsync({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: "registerCat",
+      args: [
+        form.name,
+        form.breed || "Unknown",
+        form.gender,
+        BigInt(dobTs),
+        "",
+        dataHash,
+        BigInt(Number(form.family.motherId) || 0),
+        BigInt(Number(form.family.fatherId) || 0),
+      ],
+    });
+
+    // Simpan hash transaksi
+    setTxHash(tx);
+
+    // Tunggu transaksi selesai
+    await publicClient.waitForTransactionReceipt({
+      hash: tx,
+    });
+
+    // ID cat setelah register
+    const id = Number(count) + 1;
+
+    // Simpan data lengkap secara off-chain/local
+    saveCatPayload(id, payload);
+
+    // Tampilkan halaman sukses
+    setNewCatId(id);
+
+  } catch (e) {
+    console.error(e);
+    setError(e.shortMessage || e.message || "Transaksi gagal");
   }
+  }
+   const next = async () => {
+  const err = validate();
+  if (err) return setError(err);
 
-  const next = async () => {
-    const err = validate();
-    if (err) return setError(err);
-    setError("");
-    if (step < 5) setStep(step + 1);
-    else await submit();
-  };
+  setError("");
 
+  if (step < 5) {
+    setStep(step + 1);
+  } else {
+    await submit();
+  }
+};
   // ---------------- SUCCESS SCREEN ----------------
   if (newCatId > 0) {
     return (
