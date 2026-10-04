@@ -5,3 +5,4 @@ cache
 frontend/dist
 .DS_Store
 *.log
+wagmi.js.bak 
