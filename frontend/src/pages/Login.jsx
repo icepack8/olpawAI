@@ -39,7 +39,7 @@ export default function Login() {
       >
         🦊 {isPending ? "Connecting..." : "Connect Wallet (MetaMask)"}
       </button>
-      <p className="hint">⛓️ MetaMask / Web3 · BNB Smart Chain Testnet (Chain ID 97)</p>
+      <p className="hint">⛓️ MetaMask / Web3 · Sepolia Testnet</p>
       {error && <p className="error-text">❌ {error.message}</p>}
 
       <p className="terms">

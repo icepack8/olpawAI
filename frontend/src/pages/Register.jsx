@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import {
   useAccount,
   usePublicClient,
@@ -9,7 +9,7 @@ import {
 import { keccak256, stringToHex } from "viem";
 import { CONTRACT_ADDRESS, CONTRACT_ABI, CONTRACT_DEPLOYED } from "../contract";
 import { saveCatPayload } from "../lib/store";
-import { BSCSCAN, addBscTestnet } from "../lib/utils";
+import { ETHERSCAN, addSepolia } from "../lib/utils";
 
 const STEPS = [
   "Basic Information",
@@ -161,7 +161,7 @@ const onPhoto = (e) => {
       : 0;
 
     // ============================================================
-    // REGISTER CAT — hanya 1 transaksi blockchain
+    // REGISTER CAT � hanya 1 transaksi blockchain
     // ============================================================
     const tx = await writeContractAsync({
       address: CONTRACT_ADDRESS,
@@ -217,22 +217,22 @@ const onPhoto = (e) => {
   if (newCatId > 0) {
     return (
       <div className="page">
-        <div className="header"><span className="brand">🐾 OLPaw</span></div>
+        <div className="header"><span className="brand">?? OLPaw</span></div>
         <div className="card success-card">
-          <div className="success-icon">🎉</div>
+          <div className="success-icon">??</div>
           <h2>Cat Registered!</h2>
           <p className="muted">
             <b>{form.name}</b> berhasil didaftarkan on-chain
-            {form.dnaSkipped ? "" : " dengan DNA Verified ✅"}.
+            {form.dnaSkipped ? "" : " dengan DNA Verified ?"}.
           </p>
           <p className="muted small">Cat ID: <b>#{newCatId}</b></p>
           {txHash && (
-            <a className="link-btn" href={`${BSCSCAN}/tx/${txHash}`} target="_blank" rel="noreferrer">
-              Lihat transaksi di BscScan ↗
+            <a className="link-btn" href={`${ETHERSCAN}/tx/${txHash}`} target="_blank" rel="noreferrer">
+              Lihat transaksi di ETHERSCAN ?
             </a>
           )}
           <div className="btn-row">
-            <button className="btn btn-outline" onClick={() => setPage("home")}>← Home</button>
+            <button className="btn btn-outline" onClick={() => setPage("home")}>? Home</button>
             <button className="btn btn-primary" onClick={() => setPage("cats")}>View My Cats</button>
           </div>
         </div>
@@ -245,8 +245,8 @@ const onPhoto = (e) => {
   return (
     <div className="page no-pad">
       <div className="reg-header">
-        <button className="back-btn light" onClick={() => (step === 0 ? setPage("home") : setStep(step - 1))}>←</button>
-        <span className="brand">🐾 OLPaw</span>
+        <button className="back-btn light" onClick={() => (step === 0 ? setPage("home") : setStep(step - 1))}>?</button>
+        <span className="brand">?? OLPaw</span>
         <h2>Register Your Cat</h2>
         <p>Step {step + 1} of 6: {STEPS[step]}</p>
       </div>
@@ -260,27 +260,27 @@ const onPhoto = (e) => {
 
         {error && (
           <div className="error-box">
-            ❌ {error}
+            ? {error}
             {(error.includes("chain") || error.includes("network") || error.includes("Chain")) && (
-              <button className="btn btn-small" onClick={addBscTestnet}>Add BSC Testnet</button>
+              <button className="btn btn-small" onClick={addSepolia}>Add Sepolia Testnet</button>
             )}
           </div>
         )}
 
-        {/* STEP 1 — BASIC */}
+        {/* STEP 1 � BASIC */}
         {step === 0 && (
           <>
             <label className="field-label">Cat Name *</label>
-            <div className="input-wrap"><span>🐾</span>
+            <div className="input-wrap"><span>??</span>
               <input value={form.name} onChange={(e) => up({ name: e.target.value })} placeholder="e.g. Luna" />
             </div>
 
             <label className="field-label">Date of Birth *</label>
-            <div className="input-wrap"><span>📅</span>
+            <div className="input-wrap"><span>??</span>
               <input type="date" value={form.dob} onChange={(e) => up({ dob: e.target.value })} />
             </div>
             {form.dob && (
-              <p className="muted small">📋 Age: {Math.max(0, Math.floor((Date.now() - new Date(form.dob)) / 31557600000))} years</p>
+              <p className="muted small">?? Age: {Math.max(0, Math.floor((Date.now() - new Date(form.dob)) / 31557600000))} years</p>
             )}
 
             <label className="field-label">Gender *</label>
@@ -288,7 +288,7 @@ const onPhoto = (e) => {
               {["Male", "Female"].map((g) => (
                 <button key={g} className={"pill" + (form.gender === g ? " active" : "")}
                   onClick={() => up({ gender: g })}>
-                  {g === "Male" ? "♂" : "♀"} {g}
+                  {g === "Male" ? "?" : "?"} {g}
                 </button>
               ))}
             </div>
@@ -296,20 +296,20 @@ const onPhoto = (e) => {
             <label className="field-label">Photo</label>
             <div className="photo-row">
               <label className="photo-drop">
-                ☁️<span>Drag &amp; drop a photo here<br /><small>or tap to browse · JPG, PNG up to 5MB</small></span>
+                ??<span>Drag &amp; drop a photo here<br /><small>or tap to browse � JPG, PNG up to 5MB</small></span>
                 <input type="file" accept="image/*" hidden onChange={onPhoto} />
               </label>
               {form.photo && (
                 <div className="photo-preview">
                   <img src={form.photo} alt="cat" />
-                  <button className="photo-del" onClick={() => up({ photo: null })}>🗑</button>
+                  <button className="photo-del" onClick={() => up({ photo: null })}>??</button>
                 </div>
               )}
             </div>
           </>
         )}
 
-        {/* STEP 2 — BIO */}
+        {/* STEP 2 � BIO */}
         {step === 1 && (
           <>
             <label className="field-label">1. Breed</label>
@@ -367,18 +367,18 @@ const onPhoto = (e) => {
           </>
         )}
 
-        {/* STEP 3 — DNA */}
+        {/* STEP 3 � DNA */}
         {step === 2 && (
           <>
-            <div className="info-banner">ℹ️ This section is optional. You can skip and add it later.</div>
+            <div className="info-banner">?? This section is optional. You can skip and add it later.</div>
             <div className="card">
-              <h4>🧬 DNA Summary</h4>
+              <h4>?? DNA Summary</h4>
               <div className="kv"><span>Cat Name</span><b>{form.name || "-"}</b></div>
               <div className="kv"><span>Breed</span><b>{form.breed || "Unknown"}</b></div>
               <div className="kv"><span>Traits</span><b>{form.traits.length} detected</b></div>
             </div>
             <div className="card">
-              <h4>🎯 Purity Score</h4>
+              <h4>?? Purity Score</h4>
               <div className="purity-row">
                 <b className="purity-val">{form.purityScore}%</b>
                 <input type="range" min="0" max="100" value={form.purityScore}
@@ -387,48 +387,48 @@ const onPhoto = (e) => {
               <div className="purity-track"><div className="purity-fill" style={{ width: form.purityScore + "%" }} /></div>
             </div>
             <p className="muted small">
-              💾 DNA profile akan di-hash (keccak256) dan disimpan permanen di BNB Testnet —
-              Immutable Record · Permanent Verification · Transparent History.
+              ?? DNA profile akan di-hash (keccak256) dan disimpan permanen di Ethereum Sepolia Testnet �
+              Immutable Record � Permanent Verification � Transparent History.
             </p>
             <div className="btn-row">
               <button className="btn btn-outline" disabled={isPending}
                 onClick={() => { up({ dnaSkipped: true }); setStep(3); }}>
-                ⏭ Skip
+                ? Skip
               </button>
               <button className="btn btn-primary" disabled={isPending}
                 onClick={() => { up({ dnaSkipped: false }); setStep(3); }}>
-                ⛓️ Save to Blockchain
+                ?? Save to Blockchain
               </button>
             </div>
           </>
         )}
 
-        {/* STEP 4 — HEALTH */}
+        {/* STEP 4 � HEALTH */}
         {step === 3 && (
           <>
             <div className="card">
-              <h4>🛡️ 1. Vaccinations</h4>
+              <h4>??? 1. Vaccinations</h4>
               {form.health.vaccinations.map((v, i) => (
                 <div key={i} className="vacc-row">
                   <input value={v.name} onChange={(e) => setVacc(i, { name: e.target.value })} placeholder="Vaccine name" />
                   <input type="date" value={v.date} onChange={(e) => setVacc(i, { date: e.target.value })} />
-                  <button className="icon-btn" onClick={() => upHealth({ vaccinations: form.health.vaccinations.filter((_, idx) => idx !== i) })}>🗑</button>
+                  <button className="icon-btn" onClick={() => upHealth({ vaccinations: form.health.vaccinations.filter((_, idx) => idx !== i) })}>??</button>
                 </div>
               ))}
               <button className="btn btn-dashed btn-block" onClick={() => upHealth({ vaccinations: [...form.health.vaccinations, { name: "", date: "" }] })}>
-                ＋ Add Vaccination
+                + Add Vaccination
               </button>
             </div>
 
             <div className="card">
-              <h4>🩺 2. Medical History</h4>
+              <h4>?? 2. Medical History</h4>
               <textarea rows="2" value={form.health.medicalHistory}
                 onChange={(e) => upHealth({ medicalHistory: e.target.value })}
                 placeholder="Past illnesses, conditions and treatments" />
             </div>
 
             <div className="card">
-              <h4>💚 3. Last Veterinary Checkup</h4>
+              <h4>?? 3. Last Veterinary Checkup</h4>
               <div className="two-col">
                 <input type="date" value={form.health.checkup.date} onChange={(e) => upCheckup({ date: e.target.value })} />
                 <input value={form.health.checkup.vet} onChange={(e) => upCheckup({ vet: e.target.value })} placeholder="Veterinarian" />
@@ -441,15 +441,15 @@ const onPhoto = (e) => {
           </>
         )}
 
-        {/* STEP 5 — OWNER */}
+        {/* STEP 5 � OWNER */}
         {step === 4 && (
           <>
             {[
-              ["name", "Owner Name *", "Enter owner full name", "👤"],
-              ["email", "Email Address *", "Enter email address", "✉️"],
-              ["phone", "Phone Number *", "Enter phone number", "📞"],
-              ["country", "Country *", "Enter country", "🌐"],
-              ["city", "City / Province *", "Enter city or province", "🏙"],
+              ["name", "Owner Name *", "Enter owner full name", "??"],
+              ["email", "Email Address *", "Enter email address", "??"],
+              ["phone", "Phone Number *", "Enter phone number", "??"],
+              ["country", "Country *", "Enter country", "??"],
+              ["city", "City / Province *", "Enter city or province", "??"],
             ].map(([key, label, ph, icon]) => (
               <div key={key}>
                 <label className="field-label">{label}</label>
@@ -467,14 +467,14 @@ const onPhoto = (e) => {
               {["Individual Cat Lover", "Individual Breeder"].map((t) => (
                 <button key={t} className={"pill" + (form.owner.type === t ? " active" : "")}
                   onClick={() => upOwner({ type: t })}>
-                  {t === "Individual Breeder" ? "🏅" : "😺"} {t}
+                  {t === "Individual Breeder" ? "??" : "??"} {t}
                 </button>
               ))}
             </div>
 
             {form.owner.type === "Individual Breeder" && (
               <div className="card breeder-box">
-                <h4>🏅 Breeder Registration Details</h4>
+                <h4>?? Breeder Registration Details</h4>
                 <div className="two-col">
                   <input value={form.owner.regNumber} onChange={(e) => upOwner({ regNumber: e.target.value })} placeholder="Registration Number *" />
                   <input value={form.owner.organization} onChange={(e) => upOwner({ organization: e.target.value })} placeholder="Organization / Authority *" />
@@ -488,33 +488,33 @@ const onPhoto = (e) => {
           </>
         )}
 
-        {/* STEP 6 — FAMILY TREE */}
+        {/* STEP 6 � FAMILY TREE */}
         {step === 5 && (
           <>
-            <div className="info-banner">ℹ️ This section is optional. You can skip or fill in as much as you know.</div>
+            <div className="info-banner">?? This section is optional. You can skip or fill in as much as you know.</div>
 
             <div className="card">
-              <h4>🌸 Mother Information</h4>
+              <h4>?? Mother Information</h4>
               <select value={form.family.motherId} onChange={(e) => upFamily({ motherId: e.target.value })}>
                 <option value={0}>Select from your cats (or unknown)...</option>
                 {parentOptions.filter((c) => c.gender === "Female").map((c) => (
-                  <option key={c.id.toString()} value={Number(c.id)}>#{Number(c.id)} — {c.name} ({c.breed || "Unknown"})</option>
+                  <option key={c.id.toString()} value={Number(c.id)}>#{Number(c.id)} � {c.name} ({c.breed || "Unknown"})</option>
                 ))}
               </select>
             </div>
 
             <div className="card">
-              <h4>🌀 Father Information</h4>
+              <h4>?? Father Information</h4>
               <select value={form.family.fatherId} onChange={(e) => upFamily({ fatherId: e.target.value })}>
                 <option value={0}>Select from your cats (or unknown)...</option>
                 {parentOptions.filter((c) => c.gender === "Male").map((c) => (
-                  <option key={c.id.toString()} value={Number(c.id)}>#{Number(c.id)} — {c.name} ({c.breed || "Unknown"})</option>
+                  <option key={c.id.toString()} value={Number(c.id)}>#{Number(c.id)} � {c.name} ({c.breed || "Unknown"})</option>
                 ))}
               </select>
             </div>
 
             <div className="card">
-              <h4>📜 Pedigree Document <small className="muted">(Optional)</small></h4>
+              <h4>?? Pedigree Document <small className="muted">(Optional)</small></h4>
               <p className="muted small">Dokumen &amp; jumlah generasi disimpan off-chain di profil kucing.</p>
               <select value={form.family.generations} onChange={(e) => upFamily({ generations: e.target.value })}>
                 <option value="">Select generations covered...</option>
@@ -529,10 +529,10 @@ const onPhoto = (e) => {
         <div className="btn-row sticky-actions">
           <button className="btn btn-outline" disabled={isPending}
             onClick={() => (step === 0 ? setPage("home") : setStep(step - 1))}>
-            ← Back
+            ? Back
           </button>
           <button className="btn btn-primary" disabled={isPending} onClick={next}>
-            {isPending ? "⏳ Processing..." : step === 5 ? "✓ Submit" : "Next →"}
+            {isPending ? "? Processing..." : step === 5 ? "? Submit" : "Next ?"}
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useAccount, useBalance, useDisconnect } from "wagmi";
-import { addBscTestnet, shortAddr } from "../lib/utils";
+import { addSepolia, shortAddr } from "../lib/utils";
 
 export default function Account({ setPage }) {
   const { address } = useAccount();
@@ -11,7 +11,7 @@ export default function Account({ setPage }) {
     { icon: "❤️", label: "My Favorites", sub: "Saved cats", action: () => alert("Favorites segera hadir") },
     { icon: "⚙️", label: "Settings", sub: "Notifications, Privacy, Language", action: () => alert("Settings segera hadir") },
     { icon: "🛡️", label: "Security", sub: "Change Password, Two-Factor Auth", action: () => alert("Security segera hadir") },
-    { icon: "ℹ️", label: "About & Help", sub: "Help & FAQ, Terms, Privacy Policy", action: () => alert("OLPaw v1.0 · BSC Testnet") },
+    { icon: "ℹ️", label: "About & Help", sub: "Help & FAQ, Terms, Privacy Policy", action: () => alert("OLPaw v1.0 · Sepolia Testnet") },
   ];
 
   return (
@@ -36,8 +36,8 @@ export default function Account({ setPage }) {
 
       <div className="card wallet-card">
         <div className="kv"><span>👛 Connected Wallet</span><code>{shortAddr(address)}</code></div>
-        <div className="kv"><span>Balance</span><b>{balance ? balance.formatted.slice(0, 6) : "0"} tBNB</b></div>
-        <button className="btn btn-outline btn-block" onClick={addBscTestnet}>⛓️ Add / Switch BSC Testnet</button>
+        <div className="kv"><span>Balance</span><b>{balance ? balance.formatted.slice(0, 6) : "0"} SepoliaETH</b></div>
+        <button className="btn btn-outline btn-block" onClick={addSepolia}>⛓️ Add / Switch Sepolia Testnet</button>
       </div>
 
       {menu.slice(1).map((m) => (
@@ -49,7 +49,7 @@ export default function Account({ setPage }) {
       ))}
 
       <button className="logout-btn" onClick={() => disconnect()}>➡️ Logout</button>
-      <p className="terms small">OLPaw v1.0.0 · BNB Smart Chain Testnet (Chain ID 97)</p>
+      <p className="terms small">OLPaw v1.0.0 · Sepolia Testnet</p>
     </div>
   );
 }

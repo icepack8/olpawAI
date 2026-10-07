@@ -315,3 +315,12 @@ textarea { resize: vertical; }
   .care-grid { grid-template-columns: 1fr; }
   .market-grid { grid-template-columns: 1fr; }
 }
+
+.chainlink-credit {
+  margin-top: 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  opacity: 0.55;
+  text-align: right;
+  letter-spacing: 0.2px;
+}

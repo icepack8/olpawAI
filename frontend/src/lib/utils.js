@@ -1,4 +1,4 @@
-export const BSCSCAN = "https://testnet.bscscan.com";
+export const ETHERSCAN = "https://sepolia.etherscan.io";
 
 export function formatDate(date) {
   if (!date) return "-";
@@ -22,20 +22,20 @@ export function shortAddr(address) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
-export function addBscTestnet() {
+export function addSepolia() {
   return window.ethereum?.request({
     method: "wallet_addEthereumChain",
     params: [
       {
-        chainId: "0x61",
-        chainName: "BNB Smart Chain Testnet",
+        chainId: "0xaa36a7",
+        chainName: "Sepolia Testnet",
         nativeCurrency: {
-          name: "tBNB",
-          symbol: "tBNB",
+          name: "SepoliaETH",
+          symbol: "SepoliaETH",
           decimals: 18,
         },
-        rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org"],
-        blockExplorerUrls: ["https://testnet.bscscan.com"],
+        rpcUrls: ["https://ethereum-sepolia-rpc.publicnode.com"],
+        blockExplorerUrls: ["https://sepolia.etherscan.io"],
       },
     ],
   });
